@@ -33,15 +33,28 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 
-var users = [];
+var users = {};
+var messages = [];
 
 io.sockets.on('connection', function(socket) {
-	socket.emit('auth', {}); 
+	socket.emit('auth', {messages: messages}); 
+
 	socket.on('setnick', function(data) {
-		// users.append(data.nickname);
-		console.log(data); 
-		socket.emit('welcome', {users: users});
+    if (data.nickname) {
+  		users[data.nickname] = { nickname: data.nickname };
+  		console.log(users);
+  		io.sockets.emit('updateusers', {users: users});
+    }
 	});
+
+  socket.on('send', function(data) {
+    if (data.message) {
+      console.log(data);
+      messages.push(data);
+      io.sockets.emit('addmessage', data);
+    }
+  });
+
 });
 
 server.listen(app.get('port'), function(){

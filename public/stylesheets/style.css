@@ -48,8 +48,15 @@ h4 {
   white-space: nowrap;
   font-size: 10pt;
 }
+.chat-messages ul li.me {
+  background: green;
+  color: #fff;
+}
 .chat-send {
   position: absolute;
   bottom: 0;
   height: 40px;
+}
+.presence li.current {
+  background: #ff0;
 }
